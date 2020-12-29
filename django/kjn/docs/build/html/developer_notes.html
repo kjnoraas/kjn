@@ -1,0 +1,1111 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Developer Notes &#8212; Clean Your Room 0.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="developer-notes">
+<h1>Developer Notes<a class="headerlink" href="#developer-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="mozilla-tutorial-part-2">
+<h2>Mozilla Tutorial Part 2<a class="headerlink" href="#mozilla-tutorial-part-2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#conda-env"><span class="std std-ref">Create a conda Environment</span></a></p></li>
+<li><p><a class="reference internal" href="#generate-project"><span class="std std-ref">Use django-admin to Generate a Project</span></a></p></li>
+<li><p><a class="reference internal" href="#create-app"><span class="std std-ref">Use manage.py to Create an App</span></a></p></li>
+<li><p><a class="reference internal" href="#docs"><span class="std std-ref">Create Documentation Folder</span></a></p></li>
+<li><p><a class="reference internal" href="#register"><span class="std std-ref">Register the Application</span></a></p></li>
+<li><p><a class="reference internal" href="#database"><span class="std std-ref">Specifying the Database</span></a></p></li>
+</ol>
+</div>
+<div class="section" id="create-a-conda-environment">
+<span id="conda-env"></span><h3>Create a <code class="docutils literal notranslate"><span class="pre">conda</span></code> Environment<a class="headerlink" href="#create-a-conda-environment" title="Permalink to this headline">¶</a></h3>
+<p>Create an environment for the project.</p>
+<p>Tell <code class="docutils literal notranslate"><span class="pre">conda</span></code> to specifically use python version 3.8, because 3.9 is not yet
+supported by PostgreSQL, the database that will be used.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(base)</span> <span class="gp">[20:49:43 kendall@ArchLinux django]$</span> conda create -y --name kjn <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.8
+<span class="go">Collecting package metadata (current_repodata.json): done</span>
+<span class="go">Solving environment: done</span>
+
+
+<span class="go">==&gt; WARNING: A newer version of conda exists. &lt;==</span>
+<span class="go">current version: 4.8.5</span>
+<span class="go">latest version: 4.9.2</span>
+
+<span class="go">Please update conda by running</span>
+
+<span class="gp">    $</span> conda update -n base -c defaults conda
+
+
+
+<span class="gp">#</span><span class="c1"># Package Plan ##</span>
+
+<span class="go">environment location: /home/kendall/miniconda3/envs/kjn</span>
+
+<span class="go">added / updated specs:</span>
+<span class="go">    - python=3.8</span>
+
+
+<span class="go">The following packages will be downloaded:</span>
+
+<span class="go">    package                    |            build</span>
+<span class="go">    ---------------------------|-----------------</span>
+<span class="go">    certifi-2020.11.8          |   py38h06a4308_0         147 KB</span>
+<span class="go">    pip-20.2.4                 |   py38h06a4308_0         1.8 MB</span>
+<span class="go">    setuptools-50.3.1          |   py38h06a4308_1         714 KB</span>
+<span class="go">    ------------------------------------------------------------</span>
+<span class="go">                                        Total:         2.6 MB</span>
+
+<span class="go">The following NEW packages will be INSTALLED:</span>
+
+<span class="go">_libgcc_mutex      pkgs/main/linux-64::_libgcc_mutex-0.1-main</span>
+<span class="go">ca-certificates    pkgs/main/linux-64::ca-certificates-2020.10.14-0</span>
+<span class="go">certifi            pkgs/main/linux-64::certifi-2020.11.8-py38h06a4308_0</span>
+<span class="go">ld_impl_linux-64   pkgs/main/linux-64::ld_impl_linux-64-2.33.1-h53a641e_7</span>
+<span class="go">libedit            pkgs/main/linux-64::libedit-3.1.20191231-h14c3975_1</span>
+<span class="go">libffi             pkgs/main/linux-64::libffi-3.3-he6710b0_2</span>
+<span class="go">libgcc-ng          pkgs/main/linux-64::libgcc-ng-9.1.0-hdf63c60_0</span>
+<span class="go">libstdcxx-ng       pkgs/main/linux-64::libstdcxx-ng-9.1.0-hdf63c60_0</span>
+<span class="go">ncurses            pkgs/main/linux-64::ncurses-6.2-he6710b0_1</span>
+<span class="go">openssl            pkgs/main/linux-64::openssl-1.1.1h-h7b6447c_0</span>
+<span class="go">pip                pkgs/main/linux-64::pip-20.2.4-py38h06a4308_0</span>
+<span class="go">python             pkgs/main/linux-64::python-3.8.5-h7579374_1</span>
+<span class="go">readline           pkgs/main/linux-64::readline-8.0-h7b6447c_0</span>
+<span class="go">setuptools         pkgs/main/linux-64::setuptools-50.3.1-py38h06a4308_1</span>
+<span class="go">sqlite             pkgs/main/linux-64::sqlite-3.33.0-h62c20be_0</span>
+<span class="go">tk                 pkgs/main/linux-64::tk-8.6.10-hbc83047_0</span>
+<span class="go">wheel              pkgs/main/noarch::wheel-0.35.1-pyhd3eb1b0_0</span>
+<span class="go">xz                 pkgs/main/linux-64::xz-5.2.5-h7b6447c_0</span>
+<span class="go">zlib               pkgs/main/linux-64::zlib-1.2.11-h7b6447c_3</span>
+
+
+
+<span class="go">Downloading and Extracting Packages</span>
+<span class="go">setuptools-50.3.1    | 714 KB    | ######################################################################################## | 100%</span>
+
+<span class="go">certifi-2020.11.8    | 147 KB    | ######################################################################################## | 100%</span>
+<span class="go">pip-20.2.4           | 1.8 MB    | ######################################################################################## | 100%</span>
+<span class="go">Preparing transaction: done</span>
+<span class="go">Verifying transaction: done</span>
+<span class="go">Executing transaction: done</span>
+<span class="gp">#</span>
+<span class="gp">#</span> To activate this environment, use
+<span class="gp">#</span>
+<span class="gp">#</span>     $ conda activate kjn
+<span class="gp">#</span>
+<span class="gp">#</span> To deactivate an active environment, use
+<span class="gp">#</span>
+<span class="gp">#</span>     $ conda deactivate
+</pre></div>
+</div>
+</div>
+<div class="section" id="use-django-admin-to-generate-a-project">
+<span id="generate-project"></span><h3>Use <code class="docutils literal notranslate"><span class="pre">django-admin</span></code> to Generate a Project<a class="headerlink" href="#use-django-admin-to-generate-a-project" title="Permalink to this headline">¶</a></h3>
+<p>Activate the newly created environment and install django.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(base)</span> <span class="gp">[20:53:41 kendall@ArchLinux django]$</span> conda activate kjn
+<span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[20:54:21 kendall@ArchLinux django]$</span> conda install -y django
+<span class="go">Collecting package metadata (current_repodata.json): done</span>
+<span class="go">Solving environment: done</span>
+
+<span class="gp">#</span><span class="c1"># Package Plan ##</span>
+
+<span class="go">environment location: /home/kendall/miniconda3/envs/kjn</span>
+
+<span class="go">added / updated specs:</span>
+<span class="go">    - django</span>
+
+
+<span class="go">The following packages will be downloaded:</span>
+
+<span class="go">    package                    |            build</span>
+<span class="go">    ---------------------------|-----------------</span>
+<span class="go">    asgiref-3.3.1              |     pyhd3eb1b0_0          22 KB</span>
+<span class="go">    sqlparse-0.4.1             |             py_0          35 KB</span>
+<span class="go">    ------------------------------------------------------------</span>
+<span class="go">                                        Total:          57 KB</span>
+
+<span class="go">The following NEW packages will be INSTALLED:</span>
+
+<span class="go">asgiref            pkgs/main/noarch::asgiref-3.3.1-pyhd3eb1b0_0</span>
+<span class="go">django             pkgs/main/noarch::django-3.1.3-pyhd3eb1b0_0</span>
+<span class="go">krb5               pkgs/main/linux-64::krb5-1.17.1-h173b8e3_0</span>
+<span class="go">libpq              pkgs/main/linux-64::libpq-12.2-h20c2e04_0</span>
+<span class="go">psycopg2           pkgs/main/linux-64::psycopg2-2.8.5-py38h1ba5d50_0</span>
+<span class="go">pytz               pkgs/main/noarch::pytz-2020.1-py_0</span>
+<span class="go">sqlparse           pkgs/main/noarch::sqlparse-0.4.1-py_0</span>
+
+
+
+<span class="go">Downloading and Extracting Packages</span>
+<span class="go">sqlparse-0.4.1       | 35 KB     | ######################################################################################## | 100%</span>
+<span class="go">asgiref-3.3.1        | 22 KB     | ######################################################################################## | 100%</span>
+<span class="go">Preparing transaction: done</span>
+<span class="go">Verifying transaction: done</span>
+<span class="go">Executing transaction: done</span>
+</pre></div>
+</div>
+<p>Once django is installed, <code class="docutils literal notranslate"><span class="pre">django-admin</span></code> can be invoked to create a new
+project.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[20:54:32 kendall@ArchLinux django]$</span> django-admin startproject kjn
+<span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[20:55:07 kendall@ArchLinux django]$</span> <span class="nb">cd</span> kjn
+<span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[20:55:15 kendall@ArchLinux kjn]$</span> tree
+<span class="go">.</span>
+<span class="go">├── kjn</span>
+<span class="go">│   ├── asgi.py</span>
+<span class="go">│   ├── __init__.py</span>
+<span class="go">│   ├── settings.py</span>
+<span class="go">│   ├── urls.py</span>
+<span class="go">│   └── wsgi.py</span>
+<span class="go">└── manage.py</span>
+
+<span class="go">1 directory, 6 files</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="use-manage-py-to-create-an-app">
+<span id="create-app"></span><h3>Use <strong>manage.py</strong> to Create an App<a class="headerlink" href="#use-manage-py-to-create-an-app" title="Permalink to this headline">¶</a></h3>
+<p>Since the base of the project is generated, an app can be created to be used by
+the project.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[20:58:37 kendall@ArchLinux kjn]$</span> ./manage.py startapp catalog
+<span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[21:00:06 kendall@ArchLinux kjn]$</span> tree
+<span class="go">.</span>
+<span class="go">├── catalog</span>
+<span class="go">│   ├── admin.py</span>
+<span class="go">│   ├── apps.py</span>
+<span class="go">│   ├── __init__.py</span>
+<span class="go">│   ├── migrations</span>
+<span class="go">│   │   └── __init__.py</span>
+<span class="go">│   ├── models.py</span>
+<span class="go">│   ├── tests.py</span>
+<span class="go">│   └── views.py</span>
+<span class="go">├── kjn</span>
+<span class="go">│   ├── asgi.py</span>
+<span class="go">│   ├── __init__.py</span>
+<span class="go">│   ├── __pycache__</span>
+<span class="go">│   │   ├── __init__.cpython-38.pyc</span>
+<span class="go">│   │   └── settings.cpython-38.pyc</span>
+<span class="go">│   ├── settings.py</span>
+<span class="go">│   ├── urls.py</span>
+<span class="go">│   └── wsgi.py</span>
+<span class="go">└── manage.py</span>
+
+<span class="go">4 directories, 15 files</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-documentation-folder">
+<span id="docs"></span><h3>Create Documentation Folder<a class="headerlink" href="#create-documentation-folder" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[21:00:11 kendall@ArchLinux kjn]$</span> mkdir docs
+<span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[21:00:56 kendall@ArchLinux kjn]$</span> <span class="nb">cd</span> docs/
+</pre></div>
+</div>
+<p>Install Sphinx and run <code class="docutils literal notranslate"><span class="pre">sphinx-quickstart</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[21:01:34 kendall@ArchLinux docs]$</span> conda install -y sphinx
+<span class="go">Collecting package metadata (current_repodata.json): done</span>
+<span class="go">Solving environment: done</span>
+
+<span class="gp">#</span><span class="c1"># Package Plan ##</span>
+
+<span class="go">environment location: /home/kendall/miniconda3/envs/kjn</span>
+
+<span class="go">added / updated specs:</span>
+<span class="go">    - sphinx</span>
+
+
+<span class="go">The following packages will be downloaded:</span>
+
+<span class="go">    package                    |            build</span>
+<span class="go">    ---------------------------|-----------------</span>
+<span class="go">    alabaster-0.7.12           |             py_0          16 KB</span>
+<span class="go">    babel-2.8.1                |     pyhd3eb1b0_0         5.3 MB</span>
+<span class="go">    docutils-0.16              |           py38_1         672 KB</span>
+<span class="go">    imagesize-1.2.0            |             py_0          10 KB</span>
+<span class="go">    jinja2-2.11.2              |             py_0         103 KB</span>
+<span class="go">    markupsafe-1.1.1           |   py38h7b6447c_0          33 KB</span>
+<span class="go">    packaging-20.4             |             py_0          36 KB</span>
+<span class="go">    pygments-2.7.2             |     pyhd3eb1b0_0         674 KB</span>
+<span class="go">    pyparsing-2.4.7            |             py_0          65 KB</span>
+<span class="go">    snowballstemmer-2.0.0      |             py_0          62 KB</span>
+<span class="go">    sphinx-3.2.1               |             py_0         1.1 MB</span>
+<span class="go">    sphinxcontrib-applehelp-1.0.2|             py_0          27 KB</span>
+<span class="go">    sphinxcontrib-devhelp-1.0.2|             py_0          22 KB</span>
+<span class="go">    sphinxcontrib-htmlhelp-1.0.3|             py_0          27 KB</span>
+<span class="go">    sphinxcontrib-jsmath-1.0.1 |             py_0           9 KB</span>
+<span class="go">    sphinxcontrib-qthelp-1.0.3 |             py_0          25 KB</span>
+<span class="go">    sphinxcontrib-serializinghtml-1.1.4|             py_0          24 KB</span>
+<span class="go">    ------------------------------------------------------------</span>
+<span class="go">                                        Total:         8.2 MB</span>
+
+<span class="go">The following NEW packages will be INSTALLED:</span>
+
+<span class="go">alabaster          pkgs/main/noarch::alabaster-0.7.12-py_0</span>
+<span class="go">babel              pkgs/main/noarch::babel-2.8.1-pyhd3eb1b0_0</span>
+<span class="go">brotlipy           pkgs/main/linux-64::brotlipy-0.7.0-py38h27cfd23_1003</span>
+<span class="go">cffi               pkgs/main/linux-64::cffi-1.14.3-py38h261ae71_2</span>
+<span class="go">chardet            pkgs/main/linux-64::chardet-3.0.4-py38h06a4308_1003</span>
+<span class="go">cryptography       pkgs/main/linux-64::cryptography-3.2.1-py38h3c74f83_1</span>
+<span class="go">docutils           pkgs/main/linux-64::docutils-0.16-py38_1</span>
+<span class="go">idna               pkgs/main/noarch::idna-2.10-py_0</span>
+<span class="go">imagesize          pkgs/main/noarch::imagesize-1.2.0-py_0</span>
+<span class="go">jinja2             pkgs/main/noarch::jinja2-2.11.2-py_0</span>
+<span class="go">markupsafe         pkgs/main/linux-64::markupsafe-1.1.1-py38h7b6447c_0</span>
+<span class="go">packaging          pkgs/main/noarch::packaging-20.4-py_0</span>
+<span class="go">pycparser          pkgs/main/noarch::pycparser-2.20-py_2</span>
+<span class="go">pygments           pkgs/main/noarch::pygments-2.7.2-pyhd3eb1b0_0</span>
+<span class="go">pyopenssl          pkgs/main/noarch::pyopenssl-19.1.0-pyhd3eb1b0_1</span>
+<span class="go">pyparsing          pkgs/main/noarch::pyparsing-2.4.7-py_0</span>
+<span class="go">pysocks            pkgs/main/linux-64::pysocks-1.7.1-py38h06a4308_0</span>
+<span class="go">requests           pkgs/main/noarch::requests-2.24.0-py_0</span>
+<span class="go">six                pkgs/main/linux-64::six-1.15.0-py38h06a4308_0</span>
+<span class="go">snowballstemmer    pkgs/main/noarch::snowballstemmer-2.0.0-py_0</span>
+<span class="go">sphinx             pkgs/main/noarch::sphinx-3.2.1-py_0</span>
+<span class="go">sphinxcontrib-app~ pkgs/main/noarch::sphinxcontrib-applehelp-1.0.2-py_0</span>
+<span class="go">sphinxcontrib-dev~ pkgs/main/noarch::sphinxcontrib-devhelp-1.0.2-py_0</span>
+<span class="go">sphinxcontrib-htm~ pkgs/main/noarch::sphinxcontrib-htmlhelp-1.0.3-py_0</span>
+<span class="go">sphinxcontrib-jsm~ pkgs/main/noarch::sphinxcontrib-jsmath-1.0.1-py_0</span>
+<span class="go">sphinxcontrib-qth~ pkgs/main/noarch::sphinxcontrib-qthelp-1.0.3-py_0</span>
+<span class="go">sphinxcontrib-ser~ pkgs/main/noarch::sphinxcontrib-serializinghtml-1.1.4-py_0</span>
+<span class="go">urllib3            pkgs/main/noarch::urllib3-1.25.11-py_0</span>
+
+
+
+<span class="go">Downloading and Extracting Packages</span>
+<span class="go">sphinxcontrib-devhel | 22 KB     | ######################################################################################## | 100%</span>
+<span class="go">sphinxcontrib-jsmath | 9 KB      | ######################################################################################## | 100%</span>
+<span class="go">pygments-2.7.2       | 674 KB    | ######################################################################################## | 100%</span>
+<span class="go">jinja2-2.11.2        | 103 KB    | ######################################################################################## | 100%</span>
+<span class="go">sphinxcontrib-htmlhe | 27 KB     | ######################################################################################## | 100%</span>
+<span class="go">imagesize-1.2.0      | 10 KB     | ######################################################################################## | 100%</span>
+<span class="go">markupsafe-1.1.1     | 33 KB     | ######################################################################################## | 100%</span>
+<span class="go">sphinxcontrib-serial | 24 KB     | ######################################################################################## | 100%</span>
+<span class="go">pyparsing-2.4.7      | 65 KB     | ######################################################################################## | 100%</span>
+<span class="go">alabaster-0.7.12     | 16 KB     | ######################################################################################## | 100%</span>
+<span class="go">snowballstemmer-2.0. | 62 KB     | ######################################################################################## | 100%</span>
+<span class="go">sphinxcontrib-appleh | 27 KB     | ######################################################################################## | 100%</span>
+<span class="go">docutils-0.16        | 672 KB    | ######################################################################################## | 100%</span>
+<span class="go">packaging-20.4       | 36 KB     | ######################################################################################## | 100%</span>
+<span class="go">babel-2.8.1          | 5.3 MB    | ######################################################################################## | 100%</span>
+<span class="go">sphinx-3.2.1         | 1.1 MB    | ######################################################################################## | 100%</span>
+<span class="go">sphinxcontrib-qthelp | 25 KB     | ######################################################################################## | 100%</span>
+<span class="go">Preparing transaction: done</span>
+<span class="go">Verifying transaction: done</span>
+<span class="go">Executing transaction: done</span>
+</pre></div>
+</div>
+<p>Run <code class="docutils literal notranslate"><span class="pre">sphinx-quickstart</span></code> to generate the documentation folder skeleton.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[21:01:45 kendall@ArchLinux docs]$</span> sphinx-quickstart
+<span class="go">Welcome to the Sphinx 3.2.1 quickstart utility.</span>
+
+<span class="go">Please enter values for the following settings (just press Enter to</span>
+<span class="go">accept a default value, if one is given in brackets).</span>
+
+<span class="go">Selected root path: .</span>
+
+<span class="go">You have two options for placing the build directory for Sphinx output.</span>
+<span class="go">Either, you use a directory &quot;_build&quot; within the root path, or you separate</span>
+<span class="go">&quot;source&quot; and &quot;build&quot; directories within the root path.</span>
+<span class="gp">&gt;</span> Separate <span class="nb">source</span> and build directories <span class="o">(</span>y/n<span class="o">)</span> <span class="o">[</span>n<span class="o">]</span>: y
+
+<span class="go">The project name will occur in several places in the built documentation.</span>
+<span class="gp">&gt;</span> Project name: Clean Your Room
+<span class="gp">&gt;</span> Author name<span class="o">(</span>s<span class="o">)</span>: Kendall
+<span class="gp">&gt;</span> Project release <span class="o">[]</span>: <span class="m">0</span>.0
+
+<span class="go">If the documents are to be written in a language other than English,</span>
+<span class="go">you can select a language here by its language code. Sphinx will then</span>
+<span class="go">translate text that it generates into that language.</span>
+
+<span class="go">For a list of supported codes, see</span>
+<span class="gp">https://www.sphinx-doc.org/en/master/usage/configuration.html#</span>confval-language.
+<span class="gp">&gt;</span> Project language <span class="o">[</span>en<span class="o">]</span>:
+
+<span class="go">Creating file /home/kendall/Projects/pythonprojects/django/kjn/docs/source/conf.py.</span>
+<span class="go">Creating file /home/kendall/Projects/pythonprojects/django/kjn/docs/source/index.rst.</span>
+<span class="go">Creating file /home/kendall/Projects/pythonprojects/django/kjn/docs/Makefile.</span>
+<span class="go">Creating file /home/kendall/Projects/pythonprojects/django/kjn/docs/make.bat.</span>
+
+<span class="go">Finished: An initial directory structure has been created.</span>
+
+<span class="go">You should now populate your master file /home/kendall/Projects/pythonprojects/django/kjn/docs/source/index.rst and create other documentation</span>
+<span class="go">source files. Use the Makefile to build the docs, like so:</span>
+<span class="go">make builder</span>
+<span class="go">where &quot;builder&quot; is one of the supported builders, e.g. html, latex or linkcheck.</span>
+</pre></div>
+</div>
+<p>Start these developer notes.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[21:06:29 kendall@ArchLinux docs]$</span> vim source/developer_notes.rst
+</pre></div>
+</div>
+</div>
+<div class="section" id="register-the-application">
+<span id="register"></span><h3>Register the Application<a class="headerlink" href="#register-the-application" title="Permalink to this headline">¶</a></h3>
+<p>Now that the application has bee created, we have to register it with the project
+so that it will be included when any tools are run (like adding models to the database,
+for example). Applications are registered by adding them to the <code class="docutils literal notranslate"><span class="pre">INSTALLED_APPS</span></code>
+list in the project settings.</p>
+<p>Open the project settings file, <strong>kjn/kjn/settings.py</strong>, and find the definition
+for the <code class="docutils literal notranslate"><span class="pre">INSTALLED_APPS</span></code> list. Then add a new line, as indicated:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+<span class="hll">     <span class="s1">&#39;catalog&#39;</span>
+</span>     <span class="s1">&#39;django.contrib.admin&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;django.contrib.auth&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;django.contrib.contenttypes&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;django.contrib.sessions&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;django.contrib.messages&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;django.contrib.staticfiles&#39;</span><span class="p">,</span>
+ <span class="p">]</span>
+</pre></div>
+</div>
+<p>The new line specifies the application configuration object (<code class="docutils literal notranslate"><span class="pre">CatalogConfig</span></code>)
+that was generated in <strong>kjn/catalog/apps.py</strong> when the application was created.</p>
+</div>
+<div class="section" id="specifying-the-database">
+<span id="database"></span><h3>Specifying the Database<a class="headerlink" href="#specifying-the-database" title="Permalink to this headline">¶</a></h3>
+<p>Here begins to deviate from the tutorial. Instead of sticking to the simple default
+of SQLite, PostgreSQL will be used from the beginning to <a class="reference external" href="https://docs.djangoproject.com/en/3.1/intro/tutorial02/#database-setup">avoid database-switching
+headaches down the road</a>.</p>
+<div class="section" id="installing-postgresql">
+<h4>Installing PostgreSQL<a class="headerlink" href="#installing-postgresql" title="Permalink to this headline">¶</a></h4>
+<p>Let’s follow the instructions in the <a class="reference external" href="https://wiki.archlinux.org/index.php/PostgreSQL">Arch Wiki</a>.</p>
+<p>Install the package.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[21:09:55 kendall@ArchLinux kjn]$</span> sudo pacman -S postgresql
+<span class="go">[sudo] password for kendall:</span>
+<span class="go">warning: postgresql-12.4-1 is up to date -- reinstalling</span>
+<span class="go">resolving dependencies...</span>
+<span class="go">looking for conflicting packages...</span>
+
+<span class="go">Packages (1) postgresql-12.4-1</span>
+
+<span class="go">Total Installed Size:  52.09 MiB</span>
+<span class="go">Net Upgrade Size:       0.00 MiB</span>
+
+<span class="go">:: Proceed with installation? [Y/n]</span>
+<span class="gp gp-VirtualEnv">(1/1)</span> <span class="go">checking keys in keyring                                                 [#############################################] 100%</span>
+<span class="gp gp-VirtualEnv">(1/1)</span> <span class="go">checking package integrity                                               [#############################################] 100%</span>
+<span class="gp gp-VirtualEnv">(1/1)</span> <span class="go">loading package files                                                    [#############################################] 100%</span>
+<span class="gp gp-VirtualEnv">(1/1)</span> <span class="go">checking for file conflicts                                              [#############################################] 100%</span>
+<span class="gp gp-VirtualEnv">(1/1)</span> <span class="go">checking available disk space                                            [#############################################] 100%</span>
+<span class="go">:: Processing package changes...</span>
+<span class="gp gp-VirtualEnv">(1/1)</span> <span class="go">reinstalling postgresql                                                  [#############################################] 100%</span>
+<span class="go">:: Running post-transaction hooks...</span>
+<span class="gp gp-VirtualEnv">(1/4)</span> <span class="go">Creating system user accounts...</span>
+<span class="gp gp-VirtualEnv">(2/4)</span> <span class="go">Reloading system manager configuration...</span>
+<span class="gp gp-VirtualEnv">(3/4)</span> <span class="go">Creating temporary files...</span>
+<span class="gp gp-VirtualEnv">(4/4)</span> <span class="go">Arming ConditionNeedsUpdate...</span>
+</pre></div>
+</div>
+<p>Installing the package also created a system user called <em>postgres</em> through which
+the database needs to be initialized.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[21:10:20 kendall@ArchLinux kjn]$</span> sudo -iu postgres
+<span class="go">[sudo] password for kendall:</span>
+<span class="gp">[postgres@ArchLinux ~]$</span> initdb -D /var/lib/postgres/data
+<span class="go">The files belonging to this database system will be owned by user &quot;postgres&quot;.</span>
+<span class="go">This user must also own the server process.</span>
+
+<span class="go">The database cluster will be initialized with locale &quot;en_US.UTF-8&quot;.</span>
+<span class="go">The default database encoding has accordingly been set to &quot;UTF8&quot;.</span>
+<span class="go">The default text search configuration will be set to &quot;english&quot;.</span>
+
+<span class="go">Data page checksums are disabled.</span>
+
+<span class="go">fixing permissions on existing directory /var/lib/postgres/data ... ok</span>
+<span class="go">creating subdirectories ... ok</span>
+<span class="go">selecting dynamic shared memory implementation ... posix</span>
+<span class="go">selecting default max_connections ... 100</span>
+<span class="go">selecting default shared_buffers ... 128MB</span>
+<span class="go">selecting default time zone ... America/Los_Angeles</span>
+<span class="go">creating configuration files ... ok</span>
+<span class="go">running bootstrap script ... ok</span>
+<span class="go">performing post-bootstrap initialization ... ok</span>
+<span class="go">syncing data to disk ... ok</span>
+
+<span class="go">initdb: warning: enabling &quot;trust&quot; authentication for local connections</span>
+<span class="go">You can change this by editing pg_hba.conf or using the option -A, or</span>
+<span class="go">--auth-local and --auth-host, the next time you run initdb.</span>
+
+<span class="go">Success. You can now start the database server using:</span>
+
+<span class="go">    pg_ctl -D /var/lib/postgres/data -l logfile start</span>
+<span class="gp">[postgres@ArchLinux ~]$</span> <span class="nb">exit</span>
+</pre></div>
+</div>
+<p>The locale and encoding were correctly inferred from the current environment, so
+no need to change those.</p>
+<p>And since the success message is received, time to start the postgresql service.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[21:25:49 kendall@ArchLinux kjn]$</span> sudo systemctl start postgresql
+</pre></div>
+</div>
+<p>By the wiki, create a user the same name as Arch Linux login.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[21:25:55 kendall@ArchLinux kjn]$</span> sudo -iu postgres
+<span class="go">[sudo] password for kendall:</span>
+<span class="gp">[postgres@ArchLinux ~]$</span> createuser --interactive
+<span class="go">Enter name of role to add: kendall</span>
+<span class="go">Shall the new role be a superuser? (y/n) y</span>
+<span class="gp">[postgres@ArchLinux ~]$</span> <span class="nb">exit</span>
+<span class="go">logout</span>
+</pre></div>
+</div>
+<p>Create a database for the project.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[21:34:11 kendall@ArchLinux kjn]$</span> createdb kjn
+</pre></div>
+</div>
+<p>Check out the database to verify that it was created.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[21:34:48 kendall@ArchLinux kjn]$</span> sudo -iu postgres
+<span class="go">[sudo] password for kendall:</span>
+<span class="gp">[postgres@ArchLinux ~]$</span> psql -d kjn
+<span class="go">psql (12.4)</span>
+<span class="go">Type &quot;help&quot; for help.</span>
+
+<span class="go">kjn=# \du</span>
+<span class="go">                                List of roles</span>
+<span class="go">Role name |                         Attributes                         | Member of</span>
+<span class="go">-----------+------------------------------------------------------------+-----------</span>
+<span class="go">kendall   | Superuser, Create role, Create DB                          | {}</span>
+<span class="go">postgres  | Superuser, Create role, Create DB, Replication, Bypass RLS | {}</span>
+
+<span class="go">kjn=# \dt</span>
+<span class="go">Did not find any relations.</span>
+<span class="go">kjn=# \q</span>
+<span class="go">could not save history to file &quot;/var/lib/postgres/.psql_history&quot;: No such file or directory</span>
+<span class="gp">[postgres@ArchLinux ~]$</span> <span class="nb">exit</span>
+<span class="go">logout</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="connect-postgresql-to-django">
+<h4>Connect PostgreSQL to Django<a class="headerlink" href="#connect-postgresql-to-django" title="Permalink to this headline">¶</a></h4>
+<p>Following the <a class="reference external" href="https://docs.djangoproject.com/en/3.1/ref/databases/#postgresql-notes">Django docs</a></p>
+<p><code class="docutils literal notranslate"><span class="pre">psycopg2</span></code> was automatically installed by <code class="docutils literal notranslate"><span class="pre">conda</span></code> with <code class="docutils literal notranslate"><span class="pre">django</span></code>.</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">kjn/kjn/settings.py</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+     <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;ENGINE&#39;</span><span class="p">:</span> <span class="s1">&#39;django.db.backends.postgresql&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="s1">&#39;kjn&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;USER&#39;</span><span class="p">:</span> <span class="s1">&#39;kendall&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;PASSWORD&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;HOST&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;PORT&#39;</span><span class="p">:</span> <span class="s1">&#39;5432&#39;</span><span class="p">,</span>
+     <span class="p">}</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="other-project-settings">
+<h3>Other Project Settings<a class="headerlink" href="#other-project-settings" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">kjn/kjn/settings.py</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="n">TIME_ZONE</span> <span class="o">=</span> <span class="s1">&#39;America/Los_Angeles&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="hooking-up-the-url-mapper">
+<h3>Hooking up the URL mapper<a class="headerlink" href="#hooking-up-the-url-mapper" title="Permalink to this headline">¶</a></h3>
+<p>The website is created with a URL mapper file (<strong>urls.py</strong>) in the project folder.
+While this file can be used to manage all the URL mappings, it is best practice
+to defer mappings to the associated application.</p>
+<p>There is instructional text in <strong>kjn/kjn/urls.py</strong> for help on some of the ways
+to use the URL mapper.</p>
+<p>Add the <code class="docutils literal notranslate"><span class="pre">catalog</span></code> app to the list of urls.</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">kjn/kjn/urls.py</span><a class="headerlink" href="#id6" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+ <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">include</span><span class="p">,</span> <span class="n">path</span>
+
+ <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+     <span class="n">path</span><span class="p">(</span><span class="s1">&#39;catalog/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s1">&#39;catalog.urls&#39;</span><span class="p">)),</span>
+     <span class="n">path</span><span class="p">(</span><span class="s1">&#39;admin/&#39;</span><span class="p">,</span> <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">),</span>
+ <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<p>Also, since the <code class="docutils literal notranslate"><span class="pre">catalog</span></code> app is the only one in the project, redirect the
+project home page to the <code class="docutils literal notranslate"><span class="pre">catalog</span></code> home page.</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">kjn/kjn/urls.py</span><a class="headerlink" href="#id7" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="c1"># redirect project homepage to catalog homepage</span>
+ <span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">RedirectView</span>
+
+ <span class="n">urlpatterns</span> <span class="o">+=</span> <span class="p">[</span>
+     <span class="n">path</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">RedirectView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;catalog/&#39;</span><span class="p">,</span> <span class="n">permanent</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
+ <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<p>Since the tutorial recommends enabling the serving of static files, do that.</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">kjn/kjn/urls.py</span><a class="headerlink" href="#id8" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="c1"># use static() to add url mapping to serve static file during dev (only)</span>
+ <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+ <span class="kn">from</span> <span class="nn">django.conf.urls.static</span> <span class="kn">import</span> <span class="n">static</span>
+
+ <span class="n">urlpatterns</span> <span class="o">+=</span> <span class="n">static</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">STATIC_URL</span><span class="p">,</span> <span class="n">document_root</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">STATIC_ROOT</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Finally, create a <strong>urls.py</strong> file for the <code class="docutils literal notranslate"><span class="pre">catalog</span></code> app.</p>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">kjn/catalog/urls.py</span><a class="headerlink" href="#id9" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+ <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+
+ <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+
+ <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="testing-the-website-framework">
+<h3>Testing the Website Framework<a class="headerlink" href="#testing-the-website-framework" title="Permalink to this headline">¶</a></h3>
+<p>At this point the project skeleton is complete. It doesn’t <em>do</em> anything, but
+it can be ran to verify everything is in the right place and is working as it
+should.</p>
+<p>First, run a database migration to update the database (to include any models
+that are in the installed apps) and remove some build warnings.</p>
+<div class="section" id="run-database-migrations">
+<h4>Run Database Migrations<a class="headerlink" href="#run-database-migrations" title="Permalink to this headline">¶</a></h4>
+<p>Django uses something called an Object-Relational-Mapper (ORM) to map model
+definitions in the Django code to the data structure used by the underlying
+database. As the model definitions change, Django tracks them and creates database
+migration scripts that automatically migrate the underlying data structure in
+the database to match the model.</p>
+<p>When the website was created, Django automatically added a number of models for the
+admin section to use. Use the <strong>manage.py</strong> script to tell django to define tables
+for those models in the database.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[22:10:41 kendall@ArchLinux kjn]$</span> ./manage.py makemigrations
+<span class="go">No changes detected</span>
+<span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[22:10:47 kendall@ArchLinux kjn]$</span> ./manage.py migrate
+<span class="go">Operations to perform:</span>
+<span class="go">Apply all migrations: admin, auth, contenttypes, sessions</span>
+<span class="go">Running migrations:</span>
+<span class="go">Applying contenttypes.0001_initial... OK</span>
+<span class="go">Applying auth.0001_initial... OK</span>
+<span class="go">Applying admin.0001_initial... OK</span>
+<span class="go">Applying admin.0002_logentry_remove_auto_add... OK</span>
+<span class="go">Applying admin.0003_logentry_add_action_flag_choices... OK</span>
+<span class="go">Applying contenttypes.0002_remove_content_type_name... OK</span>
+<span class="go">Applying auth.0002_alter_permission_name_max_length... OK</span>
+<span class="go">Applying auth.0003_alter_user_email_max_length... OK</span>
+<span class="go">Applying auth.0004_alter_user_username_opts... OK</span>
+<span class="go">Applying auth.0005_alter_user_last_login_null... OK</span>
+<span class="go">Applying auth.0006_require_contenttypes_0002... OK</span>
+<span class="go">Applying auth.0007_alter_validators_add_error_messages... OK</span>
+<span class="go">Applying auth.0008_alter_user_username_max_length... OK</span>
+<span class="go">Applying auth.0009_alter_user_last_name_max_length... OK</span>
+<span class="go">Applying auth.0010_alter_group_name_max_length... OK</span>
+<span class="go">Applying auth.0011_update_proxy_permissions... OK</span>
+<span class="go">Applying auth.0012_alter_user_first_name_max_length... OK</span>
+<span class="go">Applying sessions.0001_initial... OK</span>
+</pre></div>
+</div>
+<p>Start the development server.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(kjn)</span> <span class="gp">[14:28:00 kjn]$</span> ./manage.py runserver
+<span class="go">Watching for file changes with StatReloader</span>
+<span class="go">Performing system checks...</span>
+
+<span class="go">System check identified no issues (0 silenced).</span>
+<span class="go">December 22, 2020 - 22:28:03</span>
+<span class="go">Django version 3.1.4, using settings &#39;kjn.settings&#39;</span>
+<span class="go">Starting development server at http://127.0.0.1:8000/</span>
+<span class="go">Quit the server with CONTROL-C.</span>
+<span class="go">Not Found: /catalog/</span>
+</pre></div>
+</div>
+<p>Navigate to <a class="reference external" href="http://localhost:8000/catalog/">http://localhost:8000/catalog/</a> in a web browser, and it should bring
+up a 404.</p>
+<p>Congrats, the project is up and running. Let’s store our progress in an online
+repository.</p>
+<p>Create a repository on Github.</p>
+<p>Push the current local state to the online repository.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[15:13:28 kjn]$</span> git remote add origin git@github.com:kjnoraas/kjn.git
+<span class="gp">[15:13:29 kjn]$</span> git push origin master
+<span class="go">Enter passphrase for key &#39;/home/kendall/.ssh/id_ed25519&#39;:</span>
+<span class="go">Enter passphrase for key &#39;/home/kendall/.ssh/id_ed25519&#39;:</span>
+<span class="go">Enumerating objects: 5, done.</span>
+<span class="go">Counting objects: 100% (5/5), done.</span>
+<span class="go">Delta compression using up to 8 threads</span>
+<span class="go">Compressing objects: 100% (3/3), done.</span>
+<span class="go">Writing objects: 100% (5/5), 402 bytes | 402.00 KiB/s, done.</span>
+<span class="go">Total 5 (delta 0), reused 0 (delta 0), pack-reused 0</span>
+<span class="go">To github.com:kjnoraas/kjn.git</span>
+<span class="go">* [new branch]      master -&gt; master</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="mozilla-tutorial-part-3">
+<h2>Mozilla Tutorial Part 3<a class="headerlink" href="#mozilla-tutorial-part-3" title="Permalink to this headline">¶</a></h2>
+<p>In this article, we will define models for the CleanYourRoom website. We will
+explain what a model is, how to declare one and some of main field types. We will
+also briefly go over a few of the main ways to access model data.</p>
+<div class="section" id="id1">
+<h3>Overview<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Django web applications access and manage data through Python objects referred to
+as models. Models define the structure of stored data, including the field types and
+possibly also their maximum size, default values, selection list options, help
+text for documentation, label text for forms, etc. The definition of the model is
+independent of the underlying database – as one of several can be chosen as a part
+of the project settings. Once the desired database is chosen, it never needs to be
+talked to directly – just write the model structure and some other code, then Django
+does all of the dirty work of communicating with the database for you.</p>
+<p>In the following tutorial, we will define and then access the models for the
+CleanYourRoom website.</p>
+</div>
+<div class="section" id="designing-the-cleanyourroom-models">
+<h3>Designing the CleanYourRoom models<a class="headerlink" href="#designing-the-cleanyourroom-models" title="Permalink to this headline">¶</a></h3>
+<p>Before jumping in to code the models, it’s worth taking a few minutes to think about
+what data we need to store and the relationships between the different objects.</p>
+<p>We know that we need to store information about items (name, description, date obtained)
+and that there may be multiple copies of a generic items (with a globally unique ID,
+status, location, etc.). We might need to store more information about where the item was
+obtained. We want to be able to sort information based on name and location.</p>
+<p>When designing models, it makes sense to have separate models for every “object”
+(group of related information). In this case, the obvious objects are items, item
+instances and locations.</p>
+<p>We might also want to use models to represent selection-list options (e.g. like a
+drop down list of choices), rather than hard coding the choices in to the website itself
+– this is recommended whenever all the options aren’t known up front or may change.
+An obvious candidate in this case would be the location.</p>
+<p>Once we’ve decided on the models and fields, we need to think about relationships.
+Django allows you to define relationships that are one to one (<code class="docutils literal notranslate"><span class="pre">OneToOneField</span></code>),
+one to many (<code class="docutils literal notranslate"><span class="pre">ForeignKey</span></code>), and many to many (<code class="docutils literal notranslate"><span class="pre">ManyToManyField</span></code>).</p>
+<p>With that in mind, let’s create a UML association diagram that shows the models that we’ll define.</p>
+<div class="section" id="plantuml">
+<h4>PlantUML<a class="headerlink" href="#plantuml" title="Permalink to this headline">¶</a></h4>
+<p>Install Java.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[15:28:26 kjn]$</span> sudo pacman -S jre-openjdk-headless
+<span class="go">[sudo] password for kendall:</span>
+<span class="go">warning: jre-openjdk-headless-14.0.2.u12-1 is up to date -- reinstalling</span>
+<span class="go">resolving dependencies...</span>
+<span class="go">looking for conflicting packages...</span>
+
+<span class="go">Packages (1) jre-openjdk-headless-14.0.2.u12-1</span>
+
+<span class="go">Total Installed Size:  179.05 MiB</span>
+<span class="go">Net Upgrade Size:        0.00 MiB</span>
+
+<span class="go">:: Proceed with installation? [Y/n]</span>
+<span class="gp gp-VirtualEnv">(1/1)</span> <span class="go">checking keys in keyring                                       [######################################] 100%</span>
+<span class="gp gp-VirtualEnv">(1/1)</span> <span class="go">checking package integrity                                     [######################################] 100%</span>
+<span class="gp gp-VirtualEnv">(1/1)</span> <span class="go">loading package files                                          [######################################] 100%</span>
+<span class="gp gp-VirtualEnv">(1/1)</span> <span class="go">checking for file conflicts                                    [######################################] 100%</span>
+<span class="gp gp-VirtualEnv">(1/1)</span> <span class="go">checking available disk space                                  [######################################] 100%</span>
+<span class="go">:: Processing package changes...</span>
+<span class="gp gp-VirtualEnv">(1/1)</span> <span class="go">reinstalling jre-openjdk-headless                              [######################################] 100%</span>
+<span class="go">:: Running post-transaction hooks...</span>
+<span class="gp gp-VirtualEnv">(1/1)</span> <span class="go">Arming ConditionNeedsUpdate...</span>
+</pre></div>
+</div>
+<p>Install graphviz.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[15:28:43 kjn]$</span> conda install graphviz
+<span class="go">Collecting package metadata (current_repodata.json): done</span>
+<span class="go">Solving environment: failed with initial frozen solve. Retrying with flexible solve.</span>
+<span class="go">Solving environment: failed with repodata from current_repodata.json, will retry with next repodata source.</span>
+<span class="go">Collecting package metadata (repodata.json): done</span>
+<span class="go">Solving environment: done</span>
+
+<span class="gp">#</span><span class="c1"># Package Plan ##</span>
+
+<span class="go">environment location: /home/kendall/lib/miniconda3</span>
+
+<span class="go">added / updated specs:</span>
+<span class="go">    - graphviz</span>
+
+
+<span class="go">The following packages will be downloaded:</span>
+
+<span class="go">    package                    |            build</span>
+<span class="go">    ---------------------------|-----------------</span>
+<span class="go">    cairo-1.14.12              |       h7636065_2         905 KB</span>
+<span class="go">    expat-2.2.10               |       he6710b0_2         153 KB</span>
+<span class="go">    fontconfig-2.12.6          |       h49f89f6_0         221 KB</span>
+<span class="go">    freetype-2.8               |       hab7d2ae_1         542 KB</span>
+<span class="go">    fribidi-1.0.10             |       h7b6447c_0         103 KB</span>
+<span class="go">    glib-2.66.1                |       h92f7085_0         2.9 MB</span>
+<span class="go">    graphite2-1.3.14           |       h23475e2_0          99 KB</span>
+<span class="go">    graphviz-2.40.1            |       h25d223c_0         6.5 MB</span>
+<span class="go">    harfbuzz-1.7.6             |       h5f0a787_1         474 KB</span>
+<span class="go">    icu-58.2                   |       he6710b0_3        10.5 MB</span>
+<span class="go">    jpeg-9b                    |       h024ee3a_2         214 KB</span>
+<span class="go">    libpng-1.6.37              |       hbc83047_0         278 KB</span>
+<span class="go">    libtiff-4.1.0              |       h2733197_1         449 KB</span>
+<span class="go">    libtool-2.4.6              |    h7b6447c_1005         394 KB</span>
+<span class="go">    libxcb-1.14                |       h7b6447c_0         505 KB</span>
+<span class="go">    libxml2-2.9.10             |       hb55368b_3         1.2 MB</span>
+<span class="go">    lz4-c-1.9.2                |       heb0550a_3         175 KB</span>
+<span class="go">    pango-1.42.0               |       h377f3fa_0         458 KB</span>
+<span class="go">    pcre-8.44                  |       he6710b0_0         212 KB</span>
+<span class="go">    pixman-0.40.0              |       h7b6447c_0         370 KB</span>
+<span class="go">    zstd-1.4.5                 |       h9ceee32_0         619 KB</span>
+<span class="go">    ------------------------------------------------------------</span>
+<span class="go">                                        Total:        27.1 MB</span>
+
+<span class="go">The following NEW packages will be INSTALLED:</span>
+
+<span class="go">cairo              pkgs/main/linux-64::cairo-1.14.12-h7636065_2</span>
+<span class="go">expat              pkgs/main/linux-64::expat-2.2.10-he6710b0_2</span>
+<span class="go">fontconfig         pkgs/main/linux-64::fontconfig-2.12.6-h49f89f6_0</span>
+<span class="go">freetype           pkgs/main/linux-64::freetype-2.8-hab7d2ae_1</span>
+<span class="go">fribidi            pkgs/main/linux-64::fribidi-1.0.10-h7b6447c_0</span>
+<span class="go">glib               pkgs/main/linux-64::glib-2.66.1-h92f7085_0</span>
+<span class="go">graphite2          pkgs/main/linux-64::graphite2-1.3.14-h23475e2_0</span>
+<span class="go">graphviz           pkgs/main/linux-64::graphviz-2.40.1-h25d223c_0</span>
+<span class="go">harfbuzz           pkgs/main/linux-64::harfbuzz-1.7.6-h5f0a787_1</span>
+<span class="go">icu                pkgs/main/linux-64::icu-58.2-he6710b0_3</span>
+<span class="go">jpeg               pkgs/main/linux-64::jpeg-9b-h024ee3a_2</span>
+<span class="go">libpng             pkgs/main/linux-64::libpng-1.6.37-hbc83047_0</span>
+<span class="go">libtiff            pkgs/main/linux-64::libtiff-4.1.0-h2733197_1</span>
+<span class="go">libtool            pkgs/main/linux-64::libtool-2.4.6-h7b6447c_1005</span>
+<span class="go">libxcb             pkgs/main/linux-64::libxcb-1.14-h7b6447c_0</span>
+<span class="go">libxml2            pkgs/main/linux-64::libxml2-2.9.10-hb55368b_3</span>
+<span class="go">lz4-c              pkgs/main/linux-64::lz4-c-1.9.2-heb0550a_3</span>
+<span class="go">    pango              pkgs/main/linux-64::pango-1.42.0-h377f3fa_0</span>
+<span class="go">pcre               pkgs/main/linux-64::pcre-8.44-he6710b0_0</span>
+<span class="go">pixman             pkgs/main/linux-64::pixman-0.40.0-h7b6447c_0</span>
+<span class="go">zstd               pkgs/main/linux-64::zstd-1.4.5-h9ceee32_0</span>
+
+<span class="go">The following packages will be UPDATED:</span>
+
+<span class="go">ca-certificates    conda-forge::ca-certificates-2020.11.~ --&gt; pkgs/main::ca-certificates-2020.12.8-h06a4308_0</span>
+<span class="go">certifi            conda-forge::certifi-2020.11.8-py38h5~ --&gt; pkgs/main::certifi-2020.12.5-py38h06a4308_0</span>
+<span class="go">openssl            conda-forge::openssl-1.1.1h-h516909a_0 --&gt; pkgs/main::openssl-1.1.1i-h27cfd23_0</span>
+
+<span class="go">The following packages will be SUPERSEDED by a higher-priority channel:</span>
+
+<span class="go">conda              conda-forge::conda-4.9.2-py38h578d9bd~ --&gt; pkgs/main::conda-4.9.2-py38h06a4308_0</span>
+
+
+<span class="go">Proceed ([y]/n)?</span>
+
+
+<span class="go">Downloading and Extracting Packages</span>
+<span class="go">glib-2.66.1          | 2.9 MB    | ####################################################################### | 100%</span>
+<span class="go">expat-2.2.10         | 153 KB    | ####################################################################### | 100%</span>
+<span class="go">pcre-8.44            | 212 KB    | ####################################################################### | 100%</span>
+<span class="go">lz4-c-1.9.2          | 175 KB    | ####################################################################### | 100%</span>
+<span class="go">graphite2-1.3.14     | 99 KB     | ####################################################################### | 100%</span>
+<span class="go">harfbuzz-1.7.6       | 474 KB    | ####################################################################### | 100%</span>
+<span class="go">cairo-1.14.12        | 905 KB    | ####################################################################### | 100%</span>
+<span class="go">libxcb-1.14          | 505 KB    | ####################################################################### | 100%</span>
+<span class="go">icu-58.2             | 10.5 MB   | ####################################################################### | 100%</span>
+<span class="go">fribidi-1.0.10       | 103 KB    | ####################################################################### | 100%</span>
+<span class="go">jpeg-9b              | 214 KB    | ####################################################################### | 100%</span>
+<span class="go">libpng-1.6.37        | 278 KB    | ####################################################################### | 100%</span>
+<span class="go">freetype-2.8         | 542 KB    | ####################################################################### | 100%</span>
+<span class="go">zstd-1.4.5           | 619 KB    | ####################################################################### | 100%</span>
+<span class="go">fontconfig-2.12.6    | 221 KB    | ####################################################################### | 100%</span>
+<span class="go">pango-1.42.0         | 458 KB    | ####################################################################### | 100%</span>
+<span class="go">pixman-0.40.0        | 370 KB    | ####################################################################### | 100%</span>
+<span class="go">libtool-2.4.6        | 394 KB    | ####################################################################### | 100%</span>
+<span class="go">graphviz-2.40.1      | 6.5 MB    | ####################################################################### | 100%</span>
+<span class="go">libtiff-4.1.0        | 449 KB    | ####################################################################### | 100%</span>
+<span class="go">libxml2-2.9.10       | 1.2 MB    | ####################################################################### | 100%</span>
+<span class="go">Preparing transaction: done</span>
+<span class="go">Verifying transaction: done</span>
+<span class="go">Executing transaction: done</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="current-models-diagram">
+<h4>Current Models Diagram<a class="headerlink" href="#current-models-diagram" title="Permalink to this headline">¶</a></h4>
+<img alt="_images/models_v1.svg" src="_images/models_v1.svg" /><p>We’ve created models for an item (the generic details of an item), item instance
+(status of specific physical instances of an item in the system), and location.
+We have also decided to have a model for the genre so that values can be
+created/selected through the admin interface. Each box contains the model name,
+the field names and types, and also the methods and their return types.</p>
+<p>The diagram also shows the relationships between the model, including their
+<em>multiplicities</em>. The multiplicities are the numbers on the diagram showing the
+numbers (maximum and minimum) of each model that may be present in the relationship.
+For example, the connecting line between the boxes shows that an Item and a Genre
+are related. The numbers close to the Genre model show that an item must have
+one or more Genres (as many as necessary), similarly a Genre must have at least
+one Item.</p>
+</div>
+</div>
+</div>
+<div class="section" id="defining-the-cleanyourroom-models">
+<h2>Defining the CleanYourRoom Models<a class="headerlink" href="#defining-the-cleanyourroom-models" title="Permalink to this headline">¶</a></h2>
+<p>In this section, we will start defining the models for the application. Open
+<strong>models.py</strong> <em>(in /kjn/catalog/)</em>. The boilerplate at the top of the page imports
+the <em>models</em> module, which contains the model base class <code class="docutils literal notranslate"><span class="pre">models.Model</span></code> that our
+models will inherit from.</p>
+<div class="section" id="genre-model">
+<h3>Genre Model<a class="headerlink" href="#genre-model" title="Permalink to this headline">¶</a></h3>
+<p>This model is used to store information about the book category – for example
+whether it is for decoration, wearable, a tool, etc. As mentioned previously, the
+Genre has been created as a model rather than as free text or a selection list so that
+the possible values can be managed through the database rather than being hard coded.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Genre</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Model representing an item genre.&quot;&quot;&quot;</span>
+    <span class="n">help_text</span> <span class="o">=</span> <span class="s1">&#39;Enter an item genre (e.g. Decoration)&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">help_text</span><span class="o">=</span><span class="n">help_text</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;String for representing the Genre model.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+</pre></div>
+</div>
+<p>The model has a single <code class="docutils literal notranslate"><span class="pre">CharField</span></code> field (<code class="docutils literal notranslate"><span class="pre">name</span></code>), which is used to describe
+the genre (this is limited to 200 characters and has some <code class="docutils literal notranslate"><span class="pre">help_text</span></code>. At the end
+of the model we declare a <code class="docutils literal notranslate"><span class="pre">__str__()</span></code> method, which returns the name of the genre
+defined by a particular record. No verbose name has been defined, so the field
+will by default be called <code class="docutils literal notranslate"><span class="pre">Name</span></code> in forms, which is fine.</p>
+</div>
+<div class="section" id="item-model">
+<h3>Item Model<a class="headerlink" href="#item-model" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Item</span></code> model represents all information about an available item in a general
+sense, but not a physical “instance” or “copy” available for use.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Item</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Model representing an Item (but not a specific instance).&quot;&quot;&quot;</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+    <span class="n">sku</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="s2">&quot;SKU&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">help_text</span> <span class="o">=</span> <span class="s1">&#39;Describe the item.&#39;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">help_text</span><span class="o">=</span><span class="n">help_text</span><span class="p">)</span>
+
+    <span class="n">help_text</span> <span class="o">=</span> <span class="s1">&#39;Select one or more genres for this item.&#39;</span>
+    <span class="n">genre</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Genre</span><span class="p">,</span> <span class="n">help_text</span><span class="o">=</span><span class="n">help_text</span><span class="p">)</span>
+
+    <span class="n">default_location</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Location</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">SET_NULL</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;String for representing the Item model.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the url to access a detail record for the item.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;item-detail&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>The model uses a <code class="docutils literal notranslate"><span class="pre">CharField</span></code> to represent the book’s <code class="docutils literal notranslate"><span class="pre">title</span></code> and <code class="docutils literal notranslate"><span class="pre">sku</span></code>.
+For <code class="docutils literal notranslate"><span class="pre">sku</span></code>, note how the first unnamed parameter explicitly sets the label as
+“SKU”, because otherwise it would default to “Sku”. We also set the <code class="docutils literal notranslate"><span class="pre">unique</span></code> parameter
+to true, in order to ensure all items have a unique identification number. The model
+uses a <code class="docutils literal notranslate"><span class="pre">TextField</span></code> for the <code class="docutils literal notranslate"><span class="pre">description</span></code>, in case it needs to be longer.</p>
+<p>The genre is a <code class="docutils literal notranslate"><span class="pre">ManyToManyField</span></code>, so that an item can have multiple genres and
+a genre can have multiple items. The default location is defined as a <code class="docutils literal notranslate"><span class="pre">ForeignKey</span></code>, so
+each item will only have one default location, but a location may have many items.</p>
+<p>In both field types, the related model class is declared as the first unnamed
+parameter using either the model class or a string if the associated class has not
+yet been defined in this file before it is referenced. The other parameters of
+interest in the <code class="docutils literal notranslate"><span class="pre">default_location</span></code> field are <code class="docutils literal notranslate"><span class="pre">null=True</span></code>, which allows the
+database to store a <code class="docutils literal notranslate"><span class="pre">Null</span></code> value if no location is selected, and <code class="docutils literal notranslate"><span class="pre">on_delete=models.SET_NULL</span></code>,
+which will set the value of the location to <code class="docutils literal notranslate"><span class="pre">Null</span></code> if the associated location
+record is deleted.</p>
+<p>The model also defines <code class="docutils literal notranslate"><span class="pre">__str__()</span></code>, using the item’s <code class="docutils literal notranslate"><span class="pre">title</span></code> to represent an <code class="docutils literal notranslate"><span class="pre">Item</span></code>
+record. The final method, <code class="docutils literal notranslate"><span class="pre">get_absolute_url()</span></code>, returns a URL that can be used
+to access a detail record for this model (for this to work we will have to define a
+URL mapping that has the name <code class="docutils literal notranslate"><span class="pre">item-detail</span></code>, and define an associated view and
+template).</p>
+</div>
+<div class="section" id="iteminstance-model">
+<h3>ItemInstance Model<a class="headerlink" href="#iteminstance-model" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">ItemInstance</span></code> represents a specific instance of an item that can be used,
+and includes information about where the item currently is located, the date that
+item instance was acquired, (and dispossessed if no longer in possession), “imprint”
+or details and a unique ID for the item in the catalog.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ItemInstance</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Model representing a specific instance of an item.&quot;&quot;&quot;</span>
+    <span class="n">help_text</span> <span class="o">=</span> <span class="s1">&#39;Unique ID for this item instance.&#39;</span>
+    <span class="n">id_item</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">UUIDField</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">,</span> <span class="n">help_text</span><span class="o">=</span><span class="n">help_text</span><span class="p">)</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;Item&#39;</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">SET_NULL</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">imprint</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+
+    <span class="n">acquisition_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="s1">&#39;Acquired&#39;</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">dispossession_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="s1">&#39;Dispossessed&#39;</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">last_used</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="s1">&#39;Last Used&#39;</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">price</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">STATUS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;Available&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="s1">&#39;Loaned&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;Almost Out&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;Out&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;Broken&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;Damaged&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;Thrown Away&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;Maintenance&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;gifted&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">status</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">choices</span><span class="o">=</span><span class="n">LOAN_STATUS</span><span class="p">,</span>
+        <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span>
+        <span class="n">help_text</span><span class="o">=</span><span class="s1">&#39;Item Status&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;-last_used&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;String for representing the ItemInstance model.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">book</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="s1">)&#39;</span>
+</pre></div>
+</div>
+<p>Some of the fields and methods will be familiar. The model uses:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ForeignKey</span></code> to identify the associated <code class="docutils literal notranslate"><span class="pre">Item</span></code> (each item can have many instances, but an instance can only have one <code class="docutils literal notranslate"><span class="pre">Item</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CharField</span></code> to represent the imprint (specific details) of the item.</p></li>
+</ul>
+<p>We additionally declare a few new types of field:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">FloatField</span></code> is used for the <code class="docutils literal notranslate"><span class="pre">price</span></code> field to store the price of the item, and allows for <code class="docutils literal notranslate"><span class="pre">null</span></code> values.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">UUIDField</span></code> is used for the <code class="docutils literal notranslate"><span class="pre">item_id</span></code> field to set it as the <code class="docutils literal notranslate"><span class="pre">primary_key</span></code> for this model. This type of field allocates a globally unique value for each instance (one for every item that can be found).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DateField</span></code> is used for the <code class="docutils literal notranslate"><span class="pre">acquisition_date</span></code>, <code class="docutils literal notranslate"><span class="pre">dispossession_date</span></code>, and <code class="docutils literal notranslate"><span class="pre">last_used</span></code>. This value can be <code class="docutils literal notranslate"><span class="pre">blank</span></code> or <code class="docutils literal notranslate"><span class="pre">null</span></code>. The model metadata (<code class="docutils literal notranslate"><span class="pre">Class</span> <span class="pre">Meta</span></code>) uses this field to order records when they are returned in a query.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status</span></code> is a <code class="docutils literal notranslate"><span class="pre">CharField</span></code> that defines a choice/selection list. We defined a tuple containing tuples of key-value pairs and pass it the choices argument. The value in a key/value pair is a display value that a user can select, while the keys are the values that are actually saved if the option is selected. We’ve also set a default value of ‘o’ (out) as items will initially be created as “out” before counting.</p></li>
+</ul>
+<p>The method <code class="docutils literal notranslate"><span class="pre">__str__()</span></code> represents the <code class="docutils literal notranslate"><span class="pre">ItemInstance</span></code> object using a combination
+of its unique ID and the associated <code class="docutils literal notranslate"><span class="pre">Item</span></code>’s title.</p>
+</div>
+<div class="section" id="location-model">
+<h3>Location Model<a class="headerlink" href="#location-model" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Location</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Model representing a location.&quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the URL to access a particular location.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;String for representing the Location object.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span>
+</pre></div>
+</div>
+<p>The model defines a location as having a name and description.</p>
+<p>Make migrations and migrate the changes.</p>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>Mozilla Tutorial Part 3<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h3>Overview<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>The Django admin application can use your models to automatically build a site area
+that you can use create, view, update, and delete records. This can save a lot of time
+during development, making it very easy to test your models and get a feel for whether
+you have the <em>right</em> data. The admin application can also be useful for managing data
+in production, depending of the type of website. The Django project recommends it
+only for internal data management (i.e. just for use for admins, or people internal to
+your organization), as the model-centric approach is not necessarily the best possible
+interface for all users, and exposes a lot of unnecessary detail about the models.</p>
+<p>All the configuration required to include the admin application in your website
+was done automatically when you created the skeleton project. As a result, all that
+needs to be done is to register the models into the admin application.</p>
+<p>After registering the models, we’ll show how to create a new “superuser”, login to the site,
+and create some items, genres, and locations.</p>
+</div>
+<div class="section" id="registering-models">
+<h3>Registering Models<a class="headerlink" href="#registering-models" title="Permalink to this headline">¶</a></h3>
+<p>First, open <strong>admin.py</strong> in the catalog application (<strong>/kjn/catalog/admin.py</strong>).</p>
+<p>Import the models and then call <code class="docutils literal notranslate"><span class="pre">admin.site.register</span></code> to register them.</p>
+<p>..code:: python</p>
+<blockquote>
+<div><p>from .models import Genre, Item, ItemInstance, Location</p>
+<p>admin.site.register(Genre)
+admin.site.register(Item)
+admin.site.register(ItemInstance)
+admin.site.register(Location)</p>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Clean Your Room</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Kendall.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/developer_notes.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

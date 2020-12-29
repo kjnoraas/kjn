@@ -1,0 +1,41 @@
+@startuml
+
+title Catalog Models Association Diagram
+
+skinparam monochrome true
+
+class Item {
+    {field} +title: string
+    {field} +description: string
+    {field} +price_level: PriceLevel[1..*]
+    +__str__()
+}
+
+class Genre {
+    {field} +name: string
+    +__str__()
+}
+
+class Location {
+    {field} +general: string
+    {field} +description: string
+    {field} +items: Items[1..*]
+    +__str__()
+}
+
+class ItemInstance {
+    {field} +unique_id: string
+    {field} +location: Location[1..*]
+    {field} +acquisition_date: int
+    {field} +dispossession_date: int
+    {field} +item: Item[1]
+    {field} +location: Location[1]
+    +price: float
+    +__str__()
+}
+
+Item "1..*    " -- "1..*" Genre
+Item "1" -- "0..*   " ItemInstance
+ItemInstance "1..*   " -- "1 " Location
+
+@enduml
